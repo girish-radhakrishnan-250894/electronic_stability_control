@@ -1,4 +1,4 @@
-function [Q_dot,O_simulator,O_model] = state_observer(t, Q,input)
+function [Q_dot,O_simulator,O_model] = esc_controller(t, Q,input)
 %vehicle_simulator Simulator function that runs vehicle simulations
 %   This is a wrapping function that is called by the numerical integrator.
 %   It knows the current time-step and using it, it interpolates all the
