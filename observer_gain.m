@@ -38,4 +38,4 @@ C = [1 0];
 % same as the place.m function of
 input.L = placeMIMO(A',C',[-20,-20])';
 
-eig(A - input.L*C)
+eig(A - input.L*C);

@@ -363,8 +363,17 @@ Qdot = [q_d;
 
 M = M_Mat__0;
 
-O = [u
-     v];
+
+%% Outputs
+
+% Lateral Acceleration (Chassis Frame)
+
+r_dd_cm__0 = [Qdot(15) Qdot(16) Qdot(17)]';
+r_dd_cm__c = (r_dd_cm__0'*A_c0');
+
+O = [u;
+     v;
+     r_dd_cm__c(2)];
 
 
 

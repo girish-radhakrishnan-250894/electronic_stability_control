@@ -132,3 +132,8 @@ input.C2 = 80000*2.5;
 %% INPUT :- PROPERTIES : MISC.
 input.i_s = 17.842;               % Steering Ratio [-]
 
+
+
+
+
+

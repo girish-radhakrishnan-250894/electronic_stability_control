@@ -24,6 +24,8 @@ addpath(genpath(pwd));
 
 input_script;
 
+% Initializing the Low-Pass Filter
+low_pass_filter;
 %% CALCULATING OBSERVER GAIN MATRIX (L)
 
 observer_gain;
@@ -35,7 +37,7 @@ omega_y_2_guess = v_guess/input.r_02;
 omega_y_3_guess = v_guess/input.r_03;
 omega_y_4_guess = v_guess/input.r_04;
 
-q0 = [0 0 0 0 0 0 0 0 0 0 0 0 0 0 input.u_start 0 0 0 0 0 0 0 0 0 omega_y_1_guess omega_y_2_guess omega_y_3_guess omega_y_4_guess 0 0];
+Z0 = [0 0 0 0 0 0 0 0 0 0 0 0 0 0 input.u_start 0 0 0 0 0 0 0 0 0 omega_y_1_guess omega_y_2_guess omega_y_3_guess omega_y_4_guess 0 0 0];
 
 %% SIMULATION :- Simulation Options
 
@@ -46,24 +48,36 @@ opts = odeset('MaxStep',0.01);
 %% SIMULATION :- RUN 
 tic % Start timer
 
-[t,q] = ode15s(@(t,q)state_observer(t,q,input), [0 input.time(end)], q0, opts); % Run simulation
+[t,z] = ode15s(@(t,q)esc_controller(t,q,input), [0 input.time(end)], Z0, opts); % Run simulation
 
 timeTest=toc; % End timer
 
 
-n_outputs_simulator = 1;
+n_outputs_simulator = 3;
 O_simulator = zeros(length(t),n_outputs_simulator);
-parfor i=1:length(q)
-    [~,O_simulator(i,:),~] = state_observer(t(i),q(i,:)',input);
+parfor i=1:length(z)
+    [~,O_simulator(i,:),~] = esc_controller(t(i),z(i,:)',input);
 end
 
 
 %% PLOTS
 
 figure
-plot(t, O_simulator, t, q(:,29))
+plot(t, O_simulator(:,1), t, z(:,29))
 legend("v","v_{hat}", Location="best")
 
 figure
-plot(t,(rad2deg(q(:,20))), t, rad2deg(q(:,30)))
+plot(t,(rad2deg(z(:,20))), t, rad2deg(z(:,30)))
 legend("r","r_{hat}", Location="best")
+
+r_ref = O_simulator(:,2);
+figure
+plot(t, rad2deg(r_ref),'k--');
+hold on
+plot(t, rad2deg(z(:,30)));
+legend("r_{hat}", "r_{ref}", Location="best")
+
+m_d_c = O_simulator(:,3);
+figure
+plot(t,m_d_c);
+legend("M_{d_c}")
