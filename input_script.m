@@ -36,8 +36,8 @@ addpath(genpath(pwd));
 input.P_v_scaler = 0.003; % P_v is auto-set as 4.04007*m_s*g
 %% INPUT :- STEERING
 
-input.delta = 2*[0 0 0 0 deg2rad(3) deg2rad(3) deg2rad(3)];
-input.time  = [0 1 2 3 4 5 10];
+input.delta = 1*[0 0 0 0 deg2rad(3) deg2rad(3) deg2rad(3)];
+input.time  = [0 1 2 3 6 7 10];
 %% INPUT :- SPEED
 
 input.u_start = 50/3.6;
@@ -79,7 +79,7 @@ input.h_cg__0  = 0.44181;       % Sprung Mass CG Height [m]
 %            a1__c indicates X coordinate of corner 1 (front left) from CG
 %                  in chassis frame of reference
 
-input.weight_distribution = 0.6; 
+input.weight_distribution = 0.55; 
 
 % Longitudinal dimensions
 kinematics.wheelbase = 2.672;

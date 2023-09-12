@@ -1,4 +1,4 @@
-function [Qdot,f_qd_q_u,M,O] = vehicle_model_fw_simplified(q,input,delta_c, m_d_c)
+function [Qdot,f_qd_q_u,M,O] = vehicle_model_fw_simplified(q,input,delta_c, m_d_c_1, m_d_c_2, m_d_c_3, m_d_c_4)
 %vehicle_model_fw_simplified Simplified, abstract, four-wheel vehicle model
 %   This is a four-wheel vehicle model formulated in a simplified, abstract
 %   way. Small angle approximations are used substantially in this
@@ -329,16 +329,16 @@ moment_chassis    = (cross(r_cp1_cm__0 , F_sm1__0) + cross(r_cp2_cm__0 , F_sm2__
 moment_gryoscopic = (cross(co_omega__0 , JMat__0*co_omega__0));
 
 % NSM - Wheel - Corner 1
-moment_wheel_1__1 = -F_cp1__1(1)*r_L_1 + m_d_c/4;
+moment_wheel_1__1 = -F_cp1__1(1)*r_L_1 + m_d_c_1;
 
 % NSM - Wheel - Corner 2
-moment_wheel_2__2 = -F_cp2__2(1)*r_L_2 + m_d_c/4;
+moment_wheel_2__2 = -F_cp2__2(1)*r_L_2 + m_d_c_2;
 
 % NSM - Wheel - Corner 3
-moment_wheel_3__3 = -F_cp3__3(1)*r_L_3 + m_d_c/4;
+moment_wheel_3__3 = -F_cp3__3(1)*r_L_3 + m_d_c_3;
 
 % NSM - Wheel - Corner 4
-moment_wheel_4__4 = -F_cp4__4(1)*r_L_4 + m_d_c/4;
+moment_wheel_4__4 = -F_cp4__4(1)*r_L_4 + m_d_c_4;
 
 %% Force & Moment Vector Formulation
 
@@ -373,7 +373,8 @@ r_dd_cm__c = (r_dd_cm__0'*A_c0');
 
 O = [u;
      v;
-     r_dd_cm__c(2)];
+     r_dd_cm__c(2)
+     ];
 
 
 

@@ -19,6 +19,8 @@ r_hat = Z(30); % Estimate of yaq rate - r
 
 Z_lpf = Z(31);
 
+e_r_int = Z(32);
+
 
 %% Initialization : Basic Vehicle Parameters
 m = input.m_s;
@@ -52,18 +54,50 @@ e_r = r_hat - r_ref;
 
 %% Control Action - P controller
 
-kp = 500;
-ki = 10;
+kp = 1*4000;
+ki = 0;
 kd = 2;
 
-m_d_c = kp * e_r;
+m_d_c = -abs(kp * e_r + ki*e_r_int);
+m_d_c_1 = 0;
+m_d_c_2 = 0;
+m_d_c_3 = 0;
+m_d_c_4 = 0;
+if e_r < 0 % Understeer since actual yaw rate is lower than requried yaw rate
+    
+    if r_hat > 0 % Left turn
+        m_d_c_1 = 0.35 * m_d_c;
+        m_d_c_2 = 0;
+        m_d_c_3 = 0.5 * m_d_c;
+        m_d_c_4 = 0.15 * m_d_c;
+    elseif r_hat < 0 % Right turn
+        m_d_c_1 = 0;
+        m_d_c_2 = 0.35 * m_d_c;
+        m_d_c_3 = 0.15 * m_d_c;
+        m_d_c_4 = 0.5 * m_d_c;
+    end
+
+elseif e_r > 0 % Oversteer since actual yaw rate is higher than requried yaw rate 
+    if r_hat > 0 % Left turn
+        m_d_c_1 = 0;
+        m_d_c_2 = 0.75 * m_d_c;
+        m_d_c_3 = 0;
+        m_d_c_4 = 0.25 * m_d_c;
+    elseif r_hat < 0 % Right turn
+        m_d_c_1 = 0;
+        m_d_c_2 = 0.75 * m_d_c;
+        m_d_c_3 = 0.25 * m_d_c;
+        m_d_c_4 = 0;
+    end
+
+end
 
 %% Measurement data 
 % NOTE - Assuming that the four-wheel model's results can be assumed as a
 % sensor data which will be fed to the state-estimator
 q = Z(1:28);
 
-[q_dot , ~ , ~ ,O_model] = vehicle_model_fw_simplified(q, input, delta_c, m_d_c);
+[q_dot , ~ , ~ ,O_model] = vehicle_model_fw_simplified(q, input, delta_c, m_d_c_1, m_d_c_2, m_d_c_3, m_d_c_4);
 
 % Longitudinal Speed -Chassis Frame
 u = O_model(1);
@@ -108,7 +142,7 @@ r_r_1 = ss_r_delta*delta_c;
 
 % Step 2:
 % In this step we limit or saturate the reference yaw rate 
-ay_off = 2;
+ay_off = 1;
 r_r_max = (abs(ay_measured) + ay_off)/u;
 r_r_2 = min(max(r_r_1,-r_r_max),r_r_max); % This yaw rate needs to be filtered. Hence r_r_2 serves as the input to a low-pass filter
 
@@ -195,14 +229,21 @@ Z_dot_lpf = input.A_lpf*Z_lpf + input.B_lpf*U_lpf;
 
 Z_dot = [q_dot;
          (M_hat\f_hat_qd_q_u) + input.L*(y - y_hat);
-         Z_dot_lpf
+         Z_dot_lpf;
+         e_r
          ];
 
 %% Initializing outputs to be logged
 
 O_simulator = [O_model(2);
                r_ref;
-               m_d_c];
+               m_d_c;
+               r_hat - ay_measured/u;
+               m_d_c_1;
+               m_d_c_2;
+               m_d_c_3;
+               m_d_c_4;
+               ];
 
 
 
