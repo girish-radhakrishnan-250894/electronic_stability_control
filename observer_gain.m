@@ -36,6 +36,6 @@ C = [1 0];
 % Using the principle of duality, (A-BK) is equivalent to (A' - C'L').
 % Therefore, A', C' can be used using the placeMIMO function (which is the
 % same as the place.m function of
-input.L = placeMIMO(A',C',[-20,-20])';
+input.L = -place(A',C',[-5,-12])';
 
-eig(A - input.L*C);
+eig(A - input.L*C)

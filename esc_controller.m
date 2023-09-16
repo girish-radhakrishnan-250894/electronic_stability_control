@@ -55,7 +55,7 @@ e_r = r_hat - r_ref;
 %% Control Action - P controller
 
 kp = 1*4000;
-ki = 0;
+ki = 1;
 kd = 2;
 
 m_d_c = -abs(kp * e_r + ki*e_r_int);
@@ -97,7 +97,7 @@ end
 % sensor data which will be fed to the state-estimator
 q = Z(1:28);
 
-[q_dot , ~ , ~ ,O_model] = vehicle_model_fw_simplified(q, input, delta_c, m_d_c_1, m_d_c_2, m_d_c_3, m_d_c_4);
+[q_dot , ~ , ~ ,O_model] = vehicle_model_fw_simplified(q, input, delta_c, 0, m_d_c_1, m_d_c_2, m_d_c_3, m_d_c_4);
 
 % Longitudinal Speed -Chassis Frame
 u = O_model(1);

@@ -40,7 +40,7 @@ input.delta = 1*[0 0 0 0 deg2rad(3) deg2rad(3) deg2rad(3)];
 input.time  = [0 1 2 3 6 7 10];
 %% INPUT :- SPEED
 
-input.u_start = 50/3.6;
+input.u_start = 100/3.6;
 input.u_max = 150/3.6;
 %% INPUT :- Torque Distribution
 

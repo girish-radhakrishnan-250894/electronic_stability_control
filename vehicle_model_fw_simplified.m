@@ -1,4 +1,4 @@
-function [Qdot,f_qd_q_u,M,O] = vehicle_model_fw_simplified(q,input,delta_c, m_d_c_1, m_d_c_2, m_d_c_3, m_d_c_4)
+function [Qdot,f_qd_q_u,M,O] = vehicle_model_fw_simplified(q,input,delta_c, m_d_engine, m_d_c_1, m_d_c_2, m_d_c_3, m_d_c_4)
 %vehicle_model_fw_simplified Simplified, abstract, four-wheel vehicle model
 %   This is a four-wheel vehicle model formulated in a simplified, abstract
 %   way. Small angle approximations are used substantially in this
