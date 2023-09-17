@@ -1,5 +1,5 @@
-# state_observer_four_wheel_model
-Non-Linear state observer that estimates lateral velocity using measured signals from a four-wheel model
+# electronic_stability_control
+Electronic stability control algorithm that uses a non-linear state estimator to estimate yaw rate 
 
 # RUNNING THE MODEL
 a_entry_point.m                 -> As the name suggests, this is the entry script. Simply hitting PLAY inside this scrpt wil result running the observer simulation and plots the results
